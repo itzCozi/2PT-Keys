@@ -12,7 +12,7 @@ x64_keylength = 32
 class x32key:
 
   @staticmethod
-  def rawkey():
+  def x32_rawkey():
     threshold = random.randint(7, 16)
     buff = random.randint(500, 1000)
     length = random.randint(8, 20)
@@ -34,7 +34,7 @@ class x32key:
 class x64key:
 
   @staticmethod
-  def rawkey():
+  def x64_rawkey():
     threshold = random.randint(7, 16)
     buff = random.randint(1000, 5000)
     length = random.randint(16, 20)
@@ -56,7 +56,7 @@ class x64key:
 class hexkey():
 
   @staticmethod
-  def rawkey():
+  def hex_rawkey():
     threshold = random.randint(7, 16)
     buff = random.randint(1000, 5000)
     length = random.randint(16, 20)
@@ -85,7 +85,7 @@ class hexkey():
 class wordkey():
 
   @staticmethod
-  def rawkey():
+  def word_rawkey():
     wordamount = random.randint(1, 3)
     foo = []
     shortlist = []
@@ -129,15 +129,13 @@ def createkey(type):
     raise TypeError('`type` parameter must be a string object and a valid option.')
 
   if type == 'x32':
-    return split_key(x32key.rawkey())
+    return split_key(x32key.x32_rawkey())
   if type == 'x64':
-    return split_key(x64key.rawkey())
+    return split_key(x64key.x64_rawkey())
   if type == 'hex':
-    return hexkey.rawkey()
+    return hexkey.hex_rawkey()
   if type == 'wrd':
-    return wordkey.rawkey()
+    return wordkey.word_rawkey()
   else:
     return 'ERROR: Invalid key type'
 
-
-print(createkey('wrd'))
