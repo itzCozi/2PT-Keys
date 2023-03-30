@@ -4,7 +4,7 @@ import random
 import string
 import requests
 
-# Variable
+# Variables
 x32_keylength = 24
 x64_keylength = 32
 
