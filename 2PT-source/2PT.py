@@ -3,7 +3,6 @@
 import random
 import string
 import requests
-import time
 
 # Variables
 x32_keylength = 24
@@ -29,7 +28,7 @@ class x32key:
 
       key = ''.join(random.choice(foo) for iterable in range(x32_keylength))
 
-    return key
+    return str(key)
 
 
 class x64key:
@@ -51,11 +50,12 @@ class x64key:
 
       key = ''.join(random.choice(foo) for iterable in range(x64_keylength))
 
-    return key
+    return str(key)
 
 
 class hexkey():
 
+  @staticmethod
   def rawkey():
     threshold = random.randint(7, 16)
     buff = random.randint(1000, 5000)
@@ -79,32 +79,41 @@ class hexkey():
       key = str('0' + 'x' + ''.join(
         random.choice(foo) for iterable in range(random.choice(lengthlist))))
 
-    return key
+    return str(key)
 
 
 class wordkey():
 
+  @staticmethod
   def rawkey():
-    buff = random.randint(1000, 5000)
     wordamount = random.randint(1, 3)
     foo = []
+    shortlist = []
     wordlist = []
     word_site = "https://www.mit.edu/~ecprice/wordlist.10000"
     response = requests.get(word_site)
-    baseList = response.content.splitlines()
+    baselist = response.content.splitlines()
 
+    for word in baselist:
+      if len(word) <= random.randint(6, 12):
+        shortlist.append(word)
+      else:
+        pass
     for i in range(wordamount):
-      foo.append(random.choice(baseList).decode('utf-8'))
+      foo.append(random.choice(shortlist).decode('utf-8'))
     for item in foo:
       item = item.capitalize()
       wordlist.append(item)
 
-    key = ''.join(wordlist) + str(random.randint(150, 999) - 75)
+    key = ''.join(wordlist) + str(random.randint(175, 9999) - 75)
 
-    return key
+    return str(key)
 
 
 def split_key(key):
+  if not isinstance(key, str):
+    raise TypeError('`key` parameter must be a string object')
+
   keylist = list(key)
   returnkey = []
   n = 4
@@ -116,18 +125,19 @@ def split_key(key):
 
 
 def createkey(type):
+  if not isinstance(type, str):
+    raise TypeError('`type` parameter must be a string object and a valid option.')
+
   if type == 'x32':
     return split_key(x32key.rawkey())
-  elif type == 'x64':
+  if type == 'x64':
     return split_key(x64key.rawkey())
-  elif type == 'hex':
+  if type == 'hex':
     return hexkey.rawkey()
-  elif type == 'word':
+  if type == 'wrd':
     return wordkey.rawkey()
   else:
     return 'ERROR: Invalid key type'
 
 
-while True:
-  time.sleep(0.7)
-  print(wordkey.rawkey())
+print(createkey('wrd'))
