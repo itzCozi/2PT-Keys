@@ -13,7 +13,7 @@ except:
 x32_keylength = 24
 x64_keylength = 32
 user = os.getlogin()
-debug = True
+debug = False
 
 
 class _2PT():
@@ -21,8 +21,9 @@ class _2PT():
   scoop_Dir = str('C:/Users/' + user + '/scoop')
   scoopApp_Dir = str(scoop_Dir + '/apps/2PT-Console')
   scoopShim_File = str(scoop_Dir + '/shims/2PT.cmd')
-  powershell = str('C:\Windows\System32\powershell.exe')
-  scoopApp_File = str(scoop_Dir + 'apps/2PT-Console/2PT-console.py')
+  python_Path = str('C:/Users/' + user + '/AppData/Local/Programs/Python')
+  powershell = str('C:/Windows/System32/powershell.exe')
+  scoopApp_File = str(scoop_Dir + '/apps/2PT-Console/2PT.py')
 
   def update():
     # Compares the hashes of the main file and the file on the website. And if they are not the same replace them
@@ -44,27 +45,40 @@ class _2PT():
 
       if debug:
         print("Program Successfully Updated!")
+    else:
+      print("2PT is up to date")
 
   def setup():
     if os.path.exists(_2PT.scoop_Dir):
-      print("Scoop is already installed. ")
+      if debug:
+        print("Scoop is already installed. ")
       pass
     else:
       # NEEDS TESTING ON PC : https://www.makeuseof.com/windows-install-scoop/?newsletter_popup=1
-      subprocess.call(_2PT.powershell + 'iwr -useb get.scoop.sh | iex, shell=False')
-
-    os.mkdir(_2PT.main_Dir)
-    os.mkdir(_2PT.scoopApp_Dir)
-
+      subprocess.call(_2PT.powershell + 'iwr -useb get.scoop.sh | iex', shell=False)
+      
+    if not os.path.exists(_2PT.python_Path+'/Python311'):
+      subprocess.call(_2PT.powershell + f"iwr -UseBasicParsing -Uri 'https://www.python.org/ftp/python/3.11.0/python-3.11.0.exe' -OutFile {_2PT.python_Path+'/python311.exe'}")
+      os.system('start ' + _2PT.python_Path+'/python311.exe')
+      print("Please install Python 3.11.0 and then run this program again.")
+    if not os.path.exists(_2PT.main_Dir):
+      os.mkdir(_2PT.main_Dir)
+    else:
+      pass
+    if not os.path.exists(_2PT.scoopApp_Dir):
+      os.mkdir(_2PT.scoopApp_Dir)
+    else:
+      pass  
+      
     if not os.path.exists(_2PT.scoopShim_File):
       with open(_2PT.scoopShim_File, 'w') as file:
-        file.write('@' + _2PT.scoopApp_File + ' %*')
+        file.write(f'@"{_2PT.python_Path+"/Python311/python.exe"}" "{_2PT.scoopApp_File}" %*')
       if debug:
         print("Program file [" + _2PT.scoopShim_File + "] !MISSING!")
 
     if not os.path.exists(_2PT.scoopApp_File):
       _2PT.utility.install(
-        "https://itzcozi.github.io/2PT-Keys/data/2PT-console.py",_2PT.scoopApp_File, "2PT", ".cmd")
+        "https://itzcozi.github.io/2PT-Keys/data/2PT-console.py",_2PT.scoopApp_Dir, "2PT", ".py")
       if debug:
         print("Program file [" + _2PT.scoopApp_File + "] !MISSING!")
 
@@ -110,13 +124,11 @@ class _2PT():
     def install(URL, Destination, NewName, FileExt=""):
       # Download and write to file
       file_content = requests.get(URL)
-      open(Destination + '/' + NewName + FileExt,
-           "wb").write(file_content.content)
+      open(Destination + '/' + NewName + FileExt, "wb").write(file_content.content)
       if debug:
         print("Downloaded file to: " + Destination)
 
     def secure(key):
-      keyLength = len(key)
       keyList = list(key)
       olprime = random.randint(3, 8)
       buff = random.randint(200, 1000)
@@ -130,7 +142,7 @@ class _2PT():
         for i in bar:
           random.shuffle(bar)
 
-      newkey = ''.join(random.choice(bar) for i in range(keyLength))
+      newkey = ''.join(random.choice(bar) for i in range(len(key)))
       newList = list(newkey)
 
       for y in range(olprime):
@@ -293,14 +305,8 @@ class _2PT():
       return 'ERROR: Invalid key type'
 
 
-if __name__ == '__main__':
-  if os.path.exists(_2PT.main_Dir):
-    pass
-  else:
-    print('Setting up and installing tool...')
-    _2PT.setup()
-  
-  print('''
+_2PT.setup()
+print('''
 ---- 2PT Keys Console Tool ----
 
 COMMANDS
@@ -323,19 +329,21 @@ save_key(key) : save_key 0xR2D2
 -------------------------------
 ''')
 
-  userinput = input('> ')
-  inputlist = userinput.split(' ')
-  if inputlist[0] == 'new':
-    print(_2PT.createkey(inputlist[1]))
-  if inputlist[0] == 'secure':
-    print(_2PT.utility.secure(inputlist[1]))
-  if inputlist[0] == 'save_key':
-    print(_2PT.utility.save_key(inputlist[1]))
-  if inputlist[0] == 'update':
-    print(_2PT.update())
-  if inputlist[0] == 'display_dir':
-    _2PT.utility.display_dir()
-  if inputlist[0] == 'wipe_keys':
-    print(_2PT.utility.wipe_keys())
-  else:
-    print('ERROR: Invalid command.')
+userinput = input('> ')
+inputlist = userinput.split(' ')
+  
+if inputlist[0] == 'new':
+  print(_2PT.createkey(inputlist[1]))
+elif inputlist[0] == 'secure':
+  print(_2PT.utility.secure(inputlist[1]))
+elif inputlist[0] == 'save_key':
+  print(_2PT.utility.save_key(inputlist[1]))
+elif inputlist[0] == 'update':
+  print(_2PT.update())
+elif inputlist[0] == 'display_dir':
+  _2PT.utility.display_dir()
+elif inputlist[0] == 'wipe_keys':
+  print(_2PT.utility.wipe_keys())
+else:
+  print('ERROR: Invalid command.')
+  os._exit(0)
