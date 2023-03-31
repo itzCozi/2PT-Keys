@@ -7,9 +7,7 @@ try:
   import hashlib
   import subprocess
 except:
-  raise ImportError(
-    'Please install the required packages: hashlib, subprocess, request and random'
-  )
+  raise ImportError('Please install the required packages: hashlib, subprocess, request and random')
 
 # Variables
 x32_keylength = 24
@@ -27,9 +25,7 @@ class _2PT():
 
   def autoUpdate():
     # Compares the hashes of the main file and the file on the website. And if they are not the same replace them
-    webFile = _2PT.utility.hashFileURL(
-      'https://itzcozi.github.io/SafeGuard/data/safeguard-files/SafeGuard-Python.py'
-    )
+    webFile = _2PT.utility.hashFileURL('https://itzcozi.github.io/2PT-Keys/data/2PT-console.py')
     scoop_Dir = str('C:/Users/' + os.getlogin() + '/scoop')
     localFile = _2PT.utility.hashFileLOCAL(_2PT.scoopApp_File)
 
@@ -42,18 +38,16 @@ class _2PT():
       with open(scoop_Dir + 'apps/2PT-Console/2PT-console.py', "w") as f:
         f.truncate(0)
         f.write(
-          requests.get(
-            'https://itzcozi.github.io/2PT-Keys/data/2PT-console.py').text)
+          requests.get('https://itzcozi.github.io/2PT-Keys/data/2PT-console.py').text)
         f.close()
 
       if debug:
         print("Program Successfully Updated!")
 
   def setup():
-    scoopinstalled = False
-
     if os.path.exists(_2PT.scoop_Dir):
-      scoopinstalled = True
+      print("Scoop is already installed. ")
+      pass
     else:
       # NEEDS TESTING ON PC : https://www.makeuseof.com/windows-install-scoop/?newsletter_popup=1
       subprocess.call(_2PT.powershell + 'iwr -useb get.scoop.sh | iex, shell=False')
@@ -62,13 +56,14 @@ class _2PT():
     os.mkdir(_2PT.scoopApp_Dir)
 
     if not os.path.exists(_2PT.scoopShim_File):
-      with open(_2PT.scoopShim_File, 'r+') as file:
+      with open(_2PT.scoopShim_File, 'w') as file:
         file.write('@' + _2PT.scoopApp_File + ' %*')
       if debug:
         print("Program file [" + _2PT.scoopShim_File + "] !MISSING!")
 
     if not os.path.exists(_2PT.scoopApp_File):
-      _2PT.utility.install("https://itzcozi.github.io/2PT-Keys/data/2PT-console.py",_2PT.scoopApp_File,"2PT",".cmd")
+      _2PT.utility.install(
+        "https://itzcozi.github.io/2PT-Keys/data/2PT-console.py",_2PT.scoopApp_File, "2PT", ".cmd")
       if debug:
         print("Program file [" + _2PT.scoopApp_File + "] !MISSING!")
 
@@ -113,7 +108,8 @@ class _2PT():
     def install(URL, Destination, NewName, FileExt=""):
       # Download and write to file
       file_content = requests.get(URL)
-      open(Destination+'/'+NewName+FileExt,"wb").write(file_content.content)
+      open(Destination + '/' + NewName + FileExt,
+           "wb").write(file_content.content)
       if debug:
         print("Downloaded file to: " + Destination)
 
@@ -126,15 +122,15 @@ class _2PT():
       length = random.randint(8, 20)
       iterable = 0
       alphabet = string.digits + string.ascii_letters + string.digits
-      baseList = '.'.join(random.choice(alphabet)for i in range(buff)).split('.')
+      baseList = '.'.join(random.choice(alphabet) for i in range(buff)).split('.')
 
       while iterable != threshold:
-        foo = baseList + list(random.choice(alphabet)for i in range(buff))
+        foo = baseList + list(random.choice(alphabet) for i in range(buff))
         for item in range(length):
           random.shuffle(foo)
         iterable += 1
 
-        key = ''.join(random.choice(foo)for iterable in range(x32_keylength))
+        key = ''.join(random.choice(foo) for iterable in range(x32_keylength))
 
       return str(key)
 
@@ -147,15 +143,15 @@ class _2PT():
       length = random.randint(16, 20)
       iterable = 0
       alphabet = string.ascii_letters + string.digits
-      baseList = '.'.join(random.choice(alphabet)for i in range(buff)).split('.')
+      baseList = '.'.join(random.choice(alphabet) for i in range(buff)).split('.')
 
       while iterable != threshold:
-        foo = baseList + list(random.choice(alphabet)for i in range(buff))
+        foo = baseList + list(random.choice(alphabet) for i in range(buff))
         for item in range(length):
           random.shuffle(foo)
         iterable += 1
 
-        key = ''.join(random.choice(foo)for iterable in range(x64_keylength))
+        key = ''.join(random.choice(foo) for iterable in range(x64_keylength))
 
       return str(key)
 
@@ -174,16 +170,16 @@ class _2PT():
         pass
       iterable = 0
       alphabet = string.digits + string.ascii_uppercase + string.digits
-      baseList = '.'.join(random.choice(alphabet)for i in range(buff)).split('.')
+      baseList = '.'.join(random.choice(alphabet) for i in range(buff)).split('.')
 
       while iterable != threshold:
-        foo = baseList + list(random.choice(alphabet)for i in range(buff))
+        foo = baseList + list(random.choice(alphabet) for i in range(buff))
         for item in range(length):
           random.shuffle(foo)
         iterable += 1
 
         key = str('0' + 'x' + ''.join(
-          random.choice(foo)for iterable in range(random.choice(lengthlist))))
+          random.choice(foo) for iterable in range(random.choice(lengthlist))))
 
       return str(key)
 
