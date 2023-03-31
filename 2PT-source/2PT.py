@@ -123,6 +123,37 @@ def split_key(key):
   return ''.join(formattedKey[0:-1])
 
 
+def secure(key):
+  keyList = list(key)
+  olprime = random.randint(3, 8)
+  buff = random.randint(200, 1000)
+  alphabet = string.ascii_letters + string.digits + string.digits
+  randomkey = list(random.choice(alphabet) for i in range(buff)) 
+  
+  for z in range(olprime):
+    random.shuffle(keyList)
+    random.shuffle(keyList)
+    bar = keyList + randomkey
+    for i in bar:
+      random.shuffle(bar) 
+      
+  newkey = ''.join(random.choice(bar) for i in range(len(key)))
+  newList = list(newkey) 
+  
+  for y in range(olprime):
+    random.shuffle(randomkey)
+    random.shuffle(randomkey) 
+  for x in range(olprime):
+    random.shuffle(newList)
+    random.shuffle(newList)
+    foo = randomkey + newList
+    for i in foo:
+      random.shuffle(foo) 
+      
+  returnKey = split_key(''.join(random.choice(foo) for i in range(len(key)))) 
+  return str(returnKey)
+
+
 def createkey(type):
   if not isinstance(type, str):
     raise TypeError('`type` parameter must be a string object and a valid option.')
