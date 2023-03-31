@@ -67,6 +67,7 @@ class _2PT():
       if debug:
         print("Program file [" + _2PT.scoopApp_File + "] !MISSING!")
 
+  
   class utility():
 
     def hashFileURL(url):
@@ -112,9 +113,10 @@ class _2PT():
            "wb").write(file_content.content)
       if debug:
         print("Downloaded file to: " + Destination)
-
+  
+  
   class x32key:
-
+    
     @staticmethod
     def x32_rawkey():
       threshold = random.randint(7, 16)
@@ -134,6 +136,7 @@ class _2PT():
 
       return str(key)
 
+  
   class x64key:
 
     @staticmethod
@@ -155,6 +158,7 @@ class _2PT():
 
       return str(key)
 
+  
   class hexkey():
 
     @staticmethod
@@ -183,6 +187,7 @@ class _2PT():
 
       return str(key)
 
+  
   class wordkey():
 
     @staticmethod
@@ -266,5 +271,6 @@ save_key(key) : save_key 0xR2D2
 
   userinput = input('> ')
   inputlist = userinput.split(' ')
+  
   if inputlist[0] == 'new':
     print(_2PT.createkey(inputlist[1]))
