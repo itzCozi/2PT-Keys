@@ -12,7 +12,7 @@ except:
 # Variables
 x32_keylength = 24
 x64_keylength = 32
-user = 'test'#os.getlogin()
+user = 'Cooper'#os.getlogin()
 debug = True
 
 
@@ -24,7 +24,7 @@ class _2PT():
   powershell = str('C:\Windows\System32\powershell.exe')
   scoopApp_File = str(scoop_Dir + 'apps/2PT-Console/2PT-console.py')
 
-  def autoUpdate():
+  def update():
     # Compares the hashes of the main file and the file on the website. And if they are not the same replace them
     webFile = _2PT.utility.hashFileURL('https://itzcozi.github.io/2PT-Keys/data/2PT-console.py')
     scoop_Dir = str('C:/Users/' + os.getlogin() + '/scoop')
@@ -151,13 +151,16 @@ class _2PT():
     def save_key(key):
       with open(_2PT.main_Dir, 'w') as file:
         file.write(key)
+        return 'Key saved successfully'
 
     def wipe_keys():
       with open(_2PT.main_Dir, 'w') as file:
         file.truncate(0)
+        return 'All saved keys have been deleted'
 
     def display_dir():
       print(_2PT.main_Dir)
+      return True
 
   
   class x32key:
@@ -291,6 +294,12 @@ class _2PT():
 
 
 if __name__ == '__main__':
+  if os.path.exists(_2PT.main_Dir):
+    pass
+  else:
+    print('Setting up and installing tool...')
+    _2PT.setup()
+  
   print('''
 ---- 2PT Keys Console Tool ----
 
@@ -320,3 +329,13 @@ save_key(key) : save_key 0xR2D2
     print(_2PT.createkey(inputlist[1]))
   if inputlist[0] == 'secure':
     print(_2PT.utility.secure(inputlist[1]))
+  if inputlist[0] == 'save_key':
+    print(_2PT.utility.save_key(inputlist[1]))
+  if inputlist[0] == 'update':
+    print(_2PT.update())
+  if inputlist[0] == 'display_dir':
+    _2PT.utility.display_dir()
+  if inputlist[0] == 'wipe_keys':
+    print(_2PT.utility.wipe_keys())
+  
+
