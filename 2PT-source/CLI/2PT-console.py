@@ -12,7 +12,7 @@ except:
 # Variables
 x32_keylength = 24
 x64_keylength = 32
-user = 'Cooper'#os.getlogin()
+user = os.getlogin()
 debug = True
 
 
@@ -337,5 +337,5 @@ save_key(key) : save_key 0xR2D2
     _2PT.utility.display_dir()
   if inputlist[0] == 'wipe_keys':
     print(_2PT.utility.wipe_keys())
-  
-
+  else:
+    print('ERROR: Invalid command.')
