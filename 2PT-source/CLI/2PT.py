@@ -12,12 +12,13 @@ except:
 # Variables
 x32_keylength = 24
 x64_keylength = 32
+user = 'test'#os.getlogin()
 debug = True
 
 
 class _2PT():
-  main_Dir = str('C:/Users/' + os.getlogin() + '/2PT-Keys')
-  scoop_Dir = str('C:/Users/' + os.getlogin() + '/scoop')
+  main_Dir = str('C:/Users/' + user + '/2PT-Keys')
+  scoop_Dir = str('C:/Users/' + user + '/scoop')
   scoopApp_Dir = str(scoop_Dir + '/apps/2PT-Console')
   scoopShim_File = str(scoop_Dir + '/shims/2PT.cmd')
   powershell = str('C:\Windows\System32\powershell.exe')
@@ -113,7 +114,51 @@ class _2PT():
            "wb").write(file_content.content)
       if debug:
         print("Downloaded file to: " + Destination)
-  
+
+    def secure(key):
+      keyLength = len(key)
+      keyList = list(key)
+      olprime = random.randint(3, 8)
+      buff = random.randint(200, 1000)
+      alphabet = string.ascii_letters + string.digits + string.digits
+      randomkey = list(random.choice(alphabet) for i in range(buff))
+
+      for z in range(olprime):
+        random.shuffle(keyList)
+        random.shuffle(keyList)
+        bar = keyList + randomkey
+        for i in bar:
+          random.shuffle(bar)
+
+      newkey = ''.join(random.choice(bar) for i in range(keyLength))
+      newList = list(newkey)
+
+      for y in range(olprime):
+        random.shuffle(randomkey)
+        random.shuffle(randomkey)
+
+      for x in range(olprime):
+        random.shuffle(newList)
+        random.shuffle(newList)
+        foo = randomkey + newList
+        for i in foo:
+          random.shuffle(foo)
+
+      returnKey = _2PT.split_key(''.join(random.choice(foo) for i in range(len(key))))
+
+      return str(returnKey)
+    
+    def save_key(key):
+      with open(_2PT.main_Dir, 'w') as file:
+        file.write(key)
+
+    def wipe_keys():
+      with open(_2PT.main_Dir, 'w') as file:
+        file.truncate(0)
+
+    def display_dir():
+      print(_2PT.main_Dir)
+
   
   class x32key:
     
@@ -271,6 +316,7 @@ save_key(key) : save_key 0xR2D2
 
   userinput = input('> ')
   inputlist = userinput.split(' ')
-  
   if inputlist[0] == 'new':
     print(_2PT.createkey(inputlist[1]))
+  if inputlist[0] == 'secure':
+    print(_2PT.utility.secure(inputlist[1]))
