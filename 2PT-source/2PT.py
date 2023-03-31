@@ -76,8 +76,7 @@ class hexkey():
         random.shuffle(foo)
       iterable += 1
 
-      key = str('0' + 'x' + ''.join(
-        random.choice(foo) for iterable in range(random.choice(lengthlist))))
+      key = str('0' + 'x' + ''.join(random.choice(foo) for iterable in range(random.choice(lengthlist))))
 
     return str(key)
 
