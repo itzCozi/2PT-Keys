@@ -11,161 +11,161 @@ x64_keylength = 32
 
 class x32key:
 
-  @staticmethod
-  def x32_rawkey():
-    threshold = random.randint(7, 16)
-    buff = random.randint(500, 1000)
-    length = random.randint(8, 20)
-    iterable = 0
-    alphabet = string.digits + string.ascii_letters + string.digits
-    baseList = '.'.join(random.choice(alphabet) for i in range(buff)).split('.')
+	@staticmethod
+	def x32_rawkey():
+		threshold = random.randint(7, 16)
+		buff = random.randint(500, 1000)
+		length = random.randint(8, 20)
+		iterable = 0
+		alphabet = string.digits + string.ascii_letters + string.digits
+		baseList = '.'.join(random.choice(alphabet) for i in range(buff)).split('.')
 
-    while iterable != threshold:
-      foo = baseList + list(random.choice(alphabet) for i in range(buff))
-      for item in range(length):
-        random.shuffle(foo)
-      iterable += 1
+		while iterable != threshold:
+			foo = baseList + list(random.choice(alphabet) for i in range(buff))
+			for item in range(length):
+				random.shuffle(foo)
+			iterable += 1
 
-      key = ''.join(random.choice(foo) for iterable in range(x32_keylength))
+			key = ''.join(random.choice(foo) for iterable in range(x32_keylength))
 
-    return str(key)
+		return str(key)
 
 
 class x64key:
 
-  @staticmethod
-  def x64_rawkey():
-    threshold = random.randint(7, 16)
-    buff = random.randint(1000, 5000)
-    length = random.randint(16, 20)
-    iterable = 0
-    alphabet = string.ascii_letters + string.digits
-    baseList = '.'.join(random.choice(alphabet) for i in range(buff)).split('.')
+	@staticmethod
+	def x64_rawkey():
+		threshold = random.randint(7, 16)
+		buff = random.randint(1000, 5000)
+		length = random.randint(16, 20)
+		iterable = 0
+		alphabet = string.ascii_letters + string.digits
+		baseList = '.'.join(random.choice(alphabet) for i in range(buff)).split('.')
 
-    while iterable != threshold:
-      foo = baseList + list(random.choice(alphabet) for i in range(buff))
-      for item in range(length):
-        random.shuffle(foo)
-      iterable += 1
+		while iterable != threshold:
+			foo = baseList + list(random.choice(alphabet) for i in range(buff))
+			for item in range(length):
+				random.shuffle(foo)
+			iterable += 1
 
-      key = ''.join(random.choice(foo) for iterable in range(x64_keylength))
+			key = ''.join(random.choice(foo) for iterable in range(x64_keylength))
 
-    return str(key)
+		return str(key)
 
 
 class hexkey():
 
-  @staticmethod
-  def hex_rawkey():
-    threshold = random.randint(7, 16)
-    buff = random.randint(1000, 5000)
-    length = random.randint(16, 20)
-    lengthlist = [3, 4, 6]
-    if random.choice([True, False]):
-      for item in lengthlist:
-        int(random.choice(lengthlist) - 1)
-    else:
-      pass
-    iterable = 0
-    alphabet = string.digits + string.ascii_uppercase + string.digits
-    baseList = '.'.join(random.choice(alphabet) for i in range(buff)).split('.')
+	@staticmethod
+	def hex_rawkey():
+		threshold = random.randint(7, 16)
+		buff = random.randint(1000, 5000)
+		length = random.randint(16, 20)
+		lengthlist = [3, 4, 6]
+		if random.choice([True, False]):
+			for item in lengthlist:
+				int(random.choice(lengthlist) - 1)
+		else:
+			pass
+		iterable = 0
+		alphabet = string.digits + string.ascii_uppercase + string.digits
+		baseList = '.'.join(random.choice(alphabet) for i in range(buff)).split('.')
 
-    while iterable != threshold:
-      foo = baseList + list(random.choice(alphabet) for i in range(buff))
-      for item in range(length):
-        random.shuffle(foo)
-      iterable += 1
+		while iterable != threshold:
+			foo = baseList + list(random.choice(alphabet) for i in range(buff))
+			for item in range(length):
+				random.shuffle(foo)
+			iterable += 1
 
-      key = str('0' + 'x' + ''.join(random.choice(foo) for iterable in range(random.choice(lengthlist))))
+			key = str('0' + 'x' + ''.join(random.choice(foo) for iterable in range(random.choice(lengthlist))))
 
-    return str(key)
+		return str(key)
 
 
 class wordkey():
 
-  @staticmethod
-  def word_rawkey():
-    wordamount = random.randint(1, 3)
-    foo = []
-    shortlist = []
-    wordlist = []
-    word_site = "https://www.mit.edu/~ecprice/wordlist.10000"
-    response = requests.get(word_site)
-    baselist = response.content.splitlines()
+	@staticmethod
+	def word_rawkey():
+		wordamount = random.randint(1, 3)
+		foo = []
+		shortlist = []
+		wordlist = []
+		word_site = "https://www.mit.edu/~ecprice/wordlist.10000"
+		response = requests.get(word_site)
+		baselist = response.content.splitlines()
 
-    for word in baselist:
-      if len(word) <= random.randint(6, 12):
-        shortlist.append(word)
-      else:
-        pass
-    for i in range(wordamount):
-      foo.append(random.choice(shortlist).decode('utf-8'))
-    for item in foo:
-      item = item.capitalize()
-      wordlist.append(item)
+		for word in baselist:
+			if len(word) <= random.randint(6, 12):
+				shortlist.append(word)
+			else:
+				pass
+		for i in range(wordamount):
+			foo.append(random.choice(shortlist).decode('utf-8'))
+		for item in foo:
+			item = item.capitalize()
+			wordlist.append(item)
 
-    key = ''.join(wordlist) + str(random.randint(175, 9999) - 75)
+		key = ''.join(wordlist) + str(random.randint(175, 9999) - 75)
 
-    return str(key)
+		return str(key)
 
 
 def split_key(key):
-  if not isinstance(key, str):
-    raise TypeError('`key` parameter must be a string object')
+	if not isinstance(key, str):
+		raise TypeError('`key` parameter must be a string object')
 
-  keylist = list(key)
-  returnkey = []
-  n = 4
+	keylist = list(key)
+	returnkey = []
+	n = 4
 
-  for index in range(0, len(keylist), n):
-    returnkey.append(''.join(keylist[index:index + n]) + '.')
-  formattedKey = ''.join(returnkey)
-  return ''.join(formattedKey[0:-1])
+	for index in range(0, len(keylist), n):
+		returnkey.append(''.join(keylist[index:index + n]) + '.')
+	formattedKey = ''.join(returnkey)
+	return ''.join(formattedKey[0:-1])
 
 
 def secure(key):
-  keyList = list(key)
-  olprime = random.randint(3, 8)
-  buff = random.randint(200, 1000)
-  alphabet = string.ascii_letters + string.digits + string.digits
-  randomkey = list(random.choice(alphabet) for i in range(buff)) 
-  
-  for z in range(olprime):
-    random.shuffle(keyList)
-    random.shuffle(keyList)
-    bar = keyList + randomkey
-    for i in bar:
-      random.shuffle(bar) 
-      
-  newkey = ''.join(random.choice(bar) for i in range(len(key)))
-  newList = list(newkey) 
-  
-  for y in range(olprime):
-    random.shuffle(randomkey)
-    random.shuffle(randomkey) 
-  for x in range(olprime):
-    random.shuffle(newList)
-    random.shuffle(newList)
-    foo = randomkey + newList
-    for i in foo:
-      random.shuffle(foo) 
-      
-  returnKey = split_key(''.join(random.choice(foo) for i in range(len(key)))) 
-  return str(returnKey)
+	keyList = list(key)
+	olprime = random.randint(3, 8)
+	buff = random.randint(200, 1000)
+	alphabet = string.ascii_letters + string.digits + string.digits
+	randomkey = list(random.choice(alphabet) for i in range(buff))
+
+	for z in range(olprime):
+		random.shuffle(keyList)
+		random.shuffle(keyList)
+		bar = keyList + randomkey
+		for i in bar:
+			random.shuffle(bar)
+
+	newkey = ''.join(random.choice(bar) for i in range(len(key)))
+	newList = list(newkey)
+
+	for y in range(olprime):
+		random.shuffle(randomkey)
+		random.shuffle(randomkey)
+	for x in range(olprime):
+		random.shuffle(newList)
+		random.shuffle(newList)
+		foo = randomkey + newList
+		for i in foo:
+			random.shuffle(foo)
+
+	returnKey = split_key(''.join(random.choice(foo) for i in range(len(key))))
+	return str(returnKey)
 
 
 def createkey(type):
-  if not isinstance(type, str):
-    raise TypeError('`type` parameter must be a string object and a valid option.')
+	if not isinstance(type, str):
+		raise TypeError('`type` parameter must be a string object and a valid option.')
 
-  if type == 'x32':
-    return split_key(x32key.x32_rawkey())
-  if type == 'x64':
-    return split_key(x64key.x64_rawkey())
-  if type == 'hex':
-    return hexkey.hex_rawkey()
-  if type == 'wrd':
-    return wordkey.word_rawkey()
-  else:
-    return 'ERROR: Invalid key type'
+	if type == 'x32':
+		return split_key(x32key.x32_rawkey())
+	if type == 'x64':
+		return split_key(x64key.x64_rawkey())
+	if type == 'hex':
+		return hexkey.hex_rawkey()
+	if type == 'wrd':
+		return wordkey.word_rawkey()
+	else:
+		return 'ERROR: Invalid key type'
 
