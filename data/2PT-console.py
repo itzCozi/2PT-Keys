@@ -304,10 +304,10 @@ class _2PT():
       return 'ERROR: Invalid key type'
 
 
-# Driver
-_2PT.setup()
+def driver():
+  _2PT.setup()
 
-print('''
+  print('''
 ---- 2PT Keys Console Tool ----
 
 COMMANDS
@@ -317,6 +317,7 @@ COMMANDS
   -update : This function checks for an update and if applicable updates.
   -display_dir : This command simply prints the directory 2PT uses.
   -wipe_keys : Wipes the key save file.
+  -Ctrl + C : Exits the program.
 
 USAGE
   To pass a command type in the command and add a space between it and 
@@ -324,36 +325,49 @@ USAGE
   a key or a desired output if not please create an issue on the Github.
   
   Key types are as follows: x32, x64, hex, wrd
+  Github: https://github.com/itzCozi/2PT-Keys/tree/main
 
   ------ Command  |  Example ------
     new(type) - new x32
     secure(key) - secure 0x3H8I
     save_key(key) - save_key 0xR2D2
   ---------------------------------
-''')
+  ''')
 
-userinput = input('> ')
-inputlist = userinput.split(' ')
+  userinput = input('> ')
+  inputlist = userinput.split(' ')
 
-if inputlist[0] == 'new':
-  print(_2PT.createkey(inputlist[1]))
-  time.sleep(3)
-elif inputlist[0] == 'secure':
-  print(_2PT.utility.secure(inputlist[1]))
-  time.sleep(3)
-elif inputlist[0] == 'save_key':
-  print(_2PT.utility.save_key(inputlist[1]))
-  time.sleep(3)
-elif inputlist[0] == 'update':
-  _2PT.update()
-  time.sleep(3)
-elif inputlist[0] == 'display_dir':
-  _2PT.utility.display_dir()
-  time.sleep(3)
-elif inputlist[0] == 'wipe_keys':
-  print(_2PT.utility.wipe_keys())
-  time.sleep(3)
-else:
-  print('ERROR: Invalid command.')
-  time.sleep(3)
+  try:
+    if inputlist[0] == 'new':
+      print(_2PT.createkey(inputlist[1]))
+      time.sleep(3)
+    elif inputlist[0] == 'secure':
+      print(_2PT.utility.secure(inputlist[1]))
+      time.sleep(3)
+    elif inputlist[0] == 'save_key':
+      print(_2PT.utility.save_key(inputlist[1]))
+      time.sleep(3)
+    elif inputlist[0] == 'update':
+      _2PT.update()
+      time.sleep(3)
+    elif inputlist[0] == 'display_dir':
+      _2PT.utility.display_dir()
+      time.sleep(3)
+    elif inputlist[0] == 'wipe_keys':
+      print(_2PT.utility.wipe_keys())
+      time.sleep(3)
+    else:
+      print('ERROR: Invalid command.')
+      time.sleep(3)
+      sys.exit(0)
+  except:
+    print('Something went wrong, make sure your add parameters and using valid commands.')
+    time.sleep(2)
+    driver()
+
+try:
+  driver()
+except KeyboardInterrupt:
+  print('Exiting...')
+  time.sleep(1)
   sys.exit(0)
