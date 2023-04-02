@@ -14,7 +14,7 @@ except:
 x32_keylength = 24
 x64_keylength = 32
 user = os.getlogin()
-debug = True
+debug = False
 
 
 class _2PT():
