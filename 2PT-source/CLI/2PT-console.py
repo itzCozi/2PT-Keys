@@ -18,6 +18,7 @@ debug = False
 
 
 class _2PT():
+  CC = lambda: os.system('cls' if os.name in ('nt', 'dos') else 'clear')
   main_Dir = str('C:/Users/' + user + '/2PT-Keys')
   scoop_Dir = str('C:/Users/' + user + '/scoop')
   scoopApp_Dir = str(scoop_Dir + '/apps/2PT-Console')
@@ -305,9 +306,7 @@ class _2PT():
 
 
 def driver():
-  _2PT.setup()
-
-  print('''
+  help_menu = ('''
 ---- 2PT Keys Console Tool ----
 
 COMMANDS
@@ -317,6 +316,7 @@ COMMANDS
   -update : This function checks for an update and if applicable updates.
   -display_dir : This command simply prints the directory 2PT uses.
   -wipe_keys : Wipes the key save file.
+  -help : Prints this message to console.
   -Ctrl + C : Exits the program.
 
 USAGE
@@ -334,6 +334,13 @@ USAGE
   ---------------------------------
   ''')
 
+  # Setup the programs files
+  _2PT.setup()
+
+  CC()
+  print(help_menu)
+  # Continue writting this so the input loop reoccurs after one user input is processed
+  def input_loop():
   userinput = input('> ')
   inputlist = userinput.split(' ')
 
