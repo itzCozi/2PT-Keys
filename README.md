@@ -7,6 +7,7 @@
 [Windows 10](https://www.reddit.com/r/Piracy/wiki/guides/win10upgrade_activation/)
 
 [Installation&Manual](https://github.com/itzCozi/2PT-Keys/wiki/Installation&Manual)  
+[Project Map](https://github.com/users/itzCozi/projects/3)  
 [Wiki](https://github.com/itzCozi/2PT-Keys/wiki)
 
 ## Soure Code Download
