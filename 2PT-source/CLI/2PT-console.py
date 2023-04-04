@@ -13,7 +13,7 @@ except:
 # Variables
 x32_keylength = 24
 x64_keylength = 32
-user = 'Coope'#os.getlogin()
+user = os.getlogin()
 debug = False
 
 
@@ -62,9 +62,7 @@ class _2PT():
 
     if not os.path.exists(_2PT.scoopShim_File):
       with open(_2PT.scoopShim_File, 'w') as file:
-        file.write(
-          f'@"{_2PT.python_Path + "/Python311/python.exe"}" "{_2PT.scoopApp_File}" %*'
-        )
+        file.write(f'@"{_2PT.python_Path + "/Python311/python.exe"}" "{_2PT.scoopApp_File}" %*')
       if debug:
         print("Program file " + _2PT.scoopShim_File + " !MISSING!")
 
@@ -146,8 +144,7 @@ class _2PT():
         for i in foo:
           random.shuffle(foo)
 
-      returnKey = _2PT.split_key(''.join(
-        random.choice(foo) for i in range(len(key))))
+      returnKey = _2PT.split_key(''.join(random.choice(foo) for i in range(len(key))))
 
       return str(returnKey)
 
@@ -330,7 +327,7 @@ USAGE
   ''')
 
   # Setup the programs files
-  #_2PT.setup()
+  _2PT.setup()
 
   _2PT.CC()
   print(help_menu)
@@ -342,31 +339,35 @@ USAGE
     try:
       if inputlist[0] == 'new':
         print(_2PT.createkey(inputlist[1]))
-        time.sleep(3)
+        time.sleep(2)
+        input_loop()
+      elif inputlist[0] == 'help':
+        _2PT.CC()
+        print(help_menu)
         input_loop()
       elif inputlist[0] == 'secure':
         print(_2PT.utility.secure(inputlist[1]))
-        time.sleep(3)
+        time.sleep(2)
         input_loop()
       elif inputlist[0] == 'save_key':
         print(_2PT.utility.save_key(inputlist[1]))
-        time.sleep(3)
+        time.sleep(2)
         input_loop()
       elif inputlist[0] == 'update':
         _2PT.update()
-        time.sleep(3)
+        time.sleep(2)
         input_loop()
       elif inputlist[0] == 'display_dir':
         _2PT.utility.display_dir()
-        time.sleep(3)
+        time.sleep(2)
         input_loop()
       elif inputlist[0] == 'wipe_keys':
         print(_2PT.utility.wipe_keys())
-        time.sleep(3)
+        time.sleep(2)
         input_loop()
       else:
         print('ERROR: Invalid command.')
-        time.sleep(3)
+        time.sleep(2)
         input_loop()
 
     except:
@@ -375,6 +376,7 @@ USAGE
       time.sleep(2)
       sys.exit(0)
 
+  # Initialize loop
   input_loop()
 
 try:
