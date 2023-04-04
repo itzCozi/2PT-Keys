@@ -18,6 +18,7 @@ debug = False
 
 
 class _2PT():
+  CC = lambda: os.system('cls' if os.name in ('nt', 'dos') else 'clear')
   main_Dir = str('C:/Users/' + user + '/2PT-Keys')
   scoop_Dir = str('C:/Users/' + user + '/scoop')
   scoopApp_Dir = str(scoop_Dir + '/apps/2PT-Console')
@@ -25,11 +26,12 @@ class _2PT():
   python_Path = str('C:/Users/' + user + '/AppData/Local/Programs/Python')
   powershell = str('C:/Windows/System32/powershell.exe')
   scoopApp_File = str(scoop_Dir + '/apps/2PT-Console/2PT.py')
+  console_WebFile = str('https://itzcozi.github.io/2PT-Keys/data/2PT-console.py')
 
   def update():
     with open(_2PT.scoopApp_File, "w") as f:
       f.truncate(0)
-      f.write(requests.get('https://itzcozi.github.io/2PT-Keys/data/2PT-console.py').text)
+      f.write(requests.get(_2PT.console_WebFile).text)
       f.close()
 
       if debug:
@@ -46,8 +48,7 @@ class _2PT():
       subprocess.call(_2PT.powershell + 'iwr -useb get.scoop.sh | iex')
 
     if not os.path.exists(_2PT.python_Path + '/Python311'):
-      subprocess.call(
-        _2PT.powershell +f"iwr -UseBasicParsing -Uri 'https://www.python.org/ftp/python/3.11.0/python-3.11.0.exe' -OutFile {_2PT.python_Path+'/python311.exe'}")
+      subprocess.call(_2PT.powershell+f"iwr -UseBasicParsing -Uri 'https://www.python.org/ftp/python/3.11.0/python-3.11.0.exe' -OutFile {_2PT.python_Path+'/python311.exe'}")
       os.system('start ' + _2PT.python_Path + '/python311.exe')
       print("Please install Python 3.11.0 and then run this program again.")
     if not os.path.exists(_2PT.main_Dir):
@@ -66,10 +67,9 @@ class _2PT():
         print("Program file " + _2PT.scoopShim_File + " !MISSING!")
 
     if not os.path.exists(_2PT.scoopApp_File):
-      _2PT.utility.install("https://itzcozi.github.io/2PT-Keys/data/2PT-console.py",_2PT.scoopApp_Dir,"2PT",".py")
+      _2PT.utility.install(_2PT.console_WebFile, _2PT.scoopApp_Dir, "2PT", ".py")
       if debug:
         print("Program file " + _2PT.scoopApp_File + " !MISSING!")
-
 
   class utility():
 
@@ -78,8 +78,6 @@ class _2PT():
 
       with open(newFile, "w") as f:
         f.write(requests.get(url).text)
-        if os.path.getsize(newFile) != 0:
-          print('Working')
         f.close()
 
       BUF_SIZE = os.path.getsize(newFile)
@@ -93,7 +91,7 @@ class _2PT():
       sha256.update(data)
 
       f.close()
-      #os.remove(newFile)
+      os.remove(newFile)
 
       return sha256.hexdigest()
 
@@ -146,8 +144,7 @@ class _2PT():
         for i in foo:
           random.shuffle(foo)
 
-      returnKey = _2PT.split_key(''.join(
-        random.choice(foo) for i in range(len(key))))
+      returnKey = _2PT.split_key(''.join(random.choice(foo) for i in range(len(key))))
 
       return str(returnKey)
 
@@ -173,7 +170,6 @@ class _2PT():
       print(_2PT.main_Dir)
       return True
 
-
   class x32key:
 
     @staticmethod
@@ -195,7 +191,6 @@ class _2PT():
 
       return str(key)
 
-
   class x64key:
 
     @staticmethod
@@ -216,7 +211,6 @@ class _2PT():
         key = ''.join(random.choice(foo) for iterable in range(x64_keylength))
 
       return str(key)
-
 
   class hexkey():
 
@@ -246,7 +240,6 @@ class _2PT():
 
       return str(key)
 
-
   class wordkey():
 
     @staticmethod
@@ -274,7 +267,6 @@ class _2PT():
 
       return str(key)
 
-
   def split_key(key):
     if not isinstance(key, str):
       raise TypeError('`key` parameter must be a string object')
@@ -286,6 +278,7 @@ class _2PT():
     for index in range(0, len(keylist), n):
       returnkey.append(''.join(keylist[index:index + n]) + '.')
     formattedKey = ''.join(returnkey)
+
     return str(''.join(formattedKey[0:-1]))
 
   def createkey(type):
@@ -305,9 +298,7 @@ class _2PT():
 
 
 def driver():
-  _2PT.setup()
-
-  print('''
+  help_menu = ('''
 ---- 2PT Keys Console Tool ----
 
 COMMANDS
@@ -317,6 +308,7 @@ COMMANDS
   -update : This function checks for an update and if applicable updates.
   -display_dir : This command simply prints the directory 2PT uses.
   -wipe_keys : Wipes the key save file.
+  -help : Prints this message to console.
   -Ctrl + C : Exits the program.
 
 USAGE
@@ -334,40 +326,64 @@ USAGE
   ---------------------------------
   ''')
 
-  userinput = input('> ')
-  inputlist = userinput.split(' ')
+  # Setup the programs files
+  _2PT.setup()
 
-  try:
-    if inputlist[0] == 'new':
-      print(_2PT.createkey(inputlist[1]))
-      time.sleep(3)
-    elif inputlist[0] == 'secure':
-      print(_2PT.utility.secure(inputlist[1]))
-      time.sleep(3)
-    elif inputlist[0] == 'save_key':
-      print(_2PT.utility.save_key(inputlist[1]))
-      time.sleep(3)
-    elif inputlist[0] == 'update':
-      _2PT.update()
-      time.sleep(3)
-    elif inputlist[0] == 'display_dir':
-      _2PT.utility.display_dir()
-      time.sleep(3)
-    elif inputlist[0] == 'wipe_keys':
-      print(_2PT.utility.wipe_keys())
-      time.sleep(3)
-    else:
-      print('ERROR: Invalid command.')
-      time.sleep(3)
+  _2PT.CC()
+  print(help_menu)
+
+  def input_loop():
+    userinput = input('> ')
+    inputlist = userinput.split(' ')
+
+    try:
+      if inputlist[0] == 'new':
+        print(_2PT.createkey(inputlist[1]))
+        time.sleep(2)
+        input_loop()
+      elif inputlist[0] == 'help':
+        _2PT.CC()
+        print(help_menu)
+        input_loop()
+      elif inputlist[0] == 'secure':
+        print(_2PT.utility.secure(inputlist[1]))
+        time.sleep(2)
+        input_loop()
+      elif inputlist[0] == 'save_key':
+        print(_2PT.utility.save_key(inputlist[1]))
+        time.sleep(2)
+        input_loop()
+      elif inputlist[0] == 'update':
+        _2PT.update()
+        time.sleep(2)
+        input_loop()
+      elif inputlist[0] == 'display_dir':
+        _2PT.utility.display_dir()
+        time.sleep(2)
+        input_loop()
+      elif inputlist[0] == 'wipe_keys':
+        print(_2PT.utility.wipe_keys())
+        time.sleep(2)
+        input_loop()
+      else:
+        print('ERROR: Invalid command.')
+        time.sleep(2)
+        input_loop()
+
+    except:
+      _2PT.CC()
+      print('Something went wrong, make sure your add parameters and using valid commands.')
+      time.sleep(2)
       sys.exit(0)
-  except:
-    print('Something went wrong, make sure your add parameters and using valid commands.')
-    time.sleep(2)
-    driver()
+
+  # Initialize loop
+  input_loop()
 
 try:
   driver()
+
 except KeyboardInterrupt:
+  _2PT.CC()
   print('Exiting...')
   time.sleep(1)
   sys.exit(0)
