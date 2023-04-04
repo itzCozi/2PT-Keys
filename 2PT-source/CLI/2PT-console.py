@@ -51,6 +51,7 @@ class _2PT():
       subprocess.call(_2PT.powershell+f"iwr -UseBasicParsing -Uri 'https://www.python.org/ftp/python/3.11.0/python-3.11.0.exe' -OutFile {_2PT.python_Path+'/python311.exe'}")
       os.system('start ' + _2PT.python_Path + '/python311.exe')
       print("Please install Python 3.11.0 and then run this program again.")
+      time.sleep(8)
     if not os.path.exists(_2PT.main_Dir):
       os.mkdir(_2PT.main_Dir)
     else:
@@ -308,7 +309,9 @@ COMMANDS
   -update : This function checks for an update and if applicable updates.
   -display_dir : This command simply prints the directory 2PT uses.
   -wipe_keys : Wipes the key save file.
+  -say(text) : Will output the text passed with it.
   -help : Prints this message to console.
+  -clear : Wipes all text from the terminal.
   -Ctrl + C : Exits the program.
 
 USAGE
@@ -326,12 +329,12 @@ USAGE
   ---------------------------------
   ''')
 
-  # Setup the programs files
+  # Call to setup() / prep console
   _2PT.setup()
-
   _2PT.CC()
   print(help_menu)
 
+  @staticmethod
   def input_loop():
     userinput = input('> ')
     inputlist = userinput.split(' ')
@@ -344,6 +347,13 @@ USAGE
       elif inputlist[0] == 'help':
         _2PT.CC()
         print(help_menu)
+        input_loop()
+      elif inputlist[0] == 'say':
+        print(' '.join(inputlist[1:len(inputlist)]))
+        time.sleep(2)
+        input_loop()
+      elif inputlist[0] == 'clear':
+        _2PT.CC()
         input_loop()
       elif inputlist[0] == 'secure':
         print(_2PT.utility.secure(inputlist[1]))
@@ -387,3 +397,4 @@ except KeyboardInterrupt:
   print('Exiting...')
   time.sleep(1)
   sys.exit(0)
+  
