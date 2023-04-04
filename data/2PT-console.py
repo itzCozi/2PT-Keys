@@ -1,4 +1,4 @@
-# 2PT-Keys CLI Version - 1.0.0
+# 2PT-Keys CLI Version - 1.0.2.1
 try:
   import random
   import string
@@ -46,11 +46,7 @@ class _2PT():
       pass
     else:
       subprocess.call(_2PT.powershell + 'iwr -useb get.scoop.sh | iex')
-
-    if not os.path.exists(_2PT.python_Path + '/Python311'):
-      subprocess.call(_2PT.powershell+f"iwr -UseBasicParsing -Uri 'https://www.python.org/ftp/python/3.11.0/python-3.11.0.exe' -OutFile {_2PT.python_Path+'/python311.exe'}")
-      os.system('start ' + _2PT.python_Path + '/python311.exe')
-      print("Please install Python 3.11.0 and then run this program again.")
+                      
     if not os.path.exists(_2PT.main_Dir):
       os.mkdir(_2PT.main_Dir)
     else:
@@ -71,6 +67,7 @@ class _2PT():
       if debug:
         print("Program file " + _2PT.scoopApp_File + " !MISSING!")
 
+  
   class utility():
 
     def hashFileURL(url):
@@ -150,7 +147,7 @@ class _2PT():
 
     def save_key(key):
       try:
-        with open(_2PT.main_Dir, 'w') as file:
+        with open(_2PT.main_Dir+'/save_file.txt', 'w') as file:
           file.write(key)
           return 'Key saved successfully'
       except PermissionError:
@@ -159,7 +156,7 @@ class _2PT():
     @staticmethod
     def wipe_keys():
       try:
-        with open(_2PT.main_Dir, 'w') as file:
+        with open(_2PT.main_Dir+'/save_file.txt', 'w') as file:
           file.truncate(0)
           return 'All saved keys have been deleted'
       except PermissionError:
@@ -170,6 +167,7 @@ class _2PT():
       print(_2PT.main_Dir)
       return True
 
+  
   class x32key:
 
     @staticmethod
@@ -191,6 +189,7 @@ class _2PT():
 
       return str(key)
 
+  
   class x64key:
 
     @staticmethod
@@ -212,6 +211,7 @@ class _2PT():
 
       return str(key)
 
+  
   class hexkey():
 
     @staticmethod
@@ -240,6 +240,7 @@ class _2PT():
 
       return str(key)
 
+  
   class wordkey():
 
     @staticmethod
@@ -266,6 +267,7 @@ class _2PT():
       key = ''.join(wordlist) + str(random.randint(175, 9999) - 75)
 
       return str(key)
+
 
   def split_key(key):
     if not isinstance(key, str):
@@ -308,7 +310,9 @@ COMMANDS
   -update : This function checks for an update and if applicable updates.
   -display_dir : This command simply prints the directory 2PT uses.
   -wipe_keys : Wipes the key save file.
+  -say(text) : Will output the text passed with it.
   -help : Prints this message to console.
+  -clear : Wipes all text from the terminal.
   -Ctrl + C : Exits the program.
 
 USAGE
@@ -326,12 +330,12 @@ USAGE
   ---------------------------------
   ''')
 
-  # Setup the programs files
+  # Call to setup() / prep console
   _2PT.setup()
-
   _2PT.CC()
   print(help_menu)
 
+  @staticmethod
   def input_loop():
     userinput = input('> ')
     inputlist = userinput.split(' ')
@@ -345,12 +349,19 @@ USAGE
         _2PT.CC()
         print(help_menu)
         input_loop()
+      elif inputlist[0] == 'say':
+        print(' '.join(inputlist[1:len(inputlist)]))
+        time.sleep(2)
+        input_loop()
+      elif inputlist[0] == 'clear':
+        _2PT.CC()
+        input_loop()
       elif inputlist[0] == 'secure':
         print(_2PT.utility.secure(inputlist[1]))
         time.sleep(2)
         input_loop()
       elif inputlist[0] == 'save_key':
-        print(_2PT.utility.save_key(inputlist[1]))
+        print(_2PT.utility.save_key(' '.join(inputlist[1:len(inputlist)])))
         time.sleep(2)
         input_loop()
       elif inputlist[0] == 'update':
@@ -381,9 +392,9 @@ USAGE
 
 try:
   driver()
-
 except KeyboardInterrupt:
   _2PT.CC()
   print('Exiting...')
   time.sleep(1)
   sys.exit(0)
+  
