@@ -1,3 +1,6 @@
+# TODO: Remove double quotes and replace with single
+# TODO: Remove File_ext from install instances
+
 # 2PT-Keys CLI Version - 1.0.2.1
 try:
   import random
@@ -10,28 +13,29 @@ try:
 except:
   raise ImportError('Please install the required packages: hashlib, subprocess, request and random')
 
-# Variables
-x32_keylength = 24
-x64_keylength = 32
-user = os.getlogin()
 debug = False
 
-
-class _2PT():
+class vars():
+  x32_keylength = 24
+  x64_keylength = 32
+  user = os.getlogin()
   CC = lambda: os.system('cls' if os.name in ('nt', 'dos') else 'clear')
-  main_Dir = str('C:/Users/' + user + '/2PT-Keys')
-  scoop_Dir = str('C:/Users/' + user + '/scoop')
-  scoopApp_Dir = str(scoop_Dir + '/apps/2PT-Console')
-  scoopShim_File = str(scoop_Dir + '/shims/2PT.cmd')
-  python_Path = str('C:/Users/' + user + '/AppData/Local/Programs/Python')
+  main_Dir = str(f'C:/Users/{user}/2PT-Keys')
+  scoop_Dir = str(f'C:/Users/{user}/scoop')
+  scoopApp_Dir = str(f'{scoop_Dir}/apps/2PT-Console')
+  scoopShim_File = str(f'{scoop_Dir}/shims/2PT.cmd')
+  python_Path = str(f'C:/Users/{user}/AppData/Local/Programs/Python')
   powershell = str('C:/Windows/System32/powershell.exe')
-  scoopApp_File = str(scoop_Dir + '/apps/2PT-Console/2PT.py')
-  console_WebFile = str('https://itzcozi.github.io/2PT-Keys/data/2PT-console.py')
+  scoopApp_File = str(f'{scoop_Dir}/apps/2PT-Console/2PT.py')
+  console_WebFile = str(f'https://itzcozi.github.io/2PT-Keys/data/2PT-console.py')
+  
+  
+class _2PT():
 
   def update():
-    with open(_2PT.scoopApp_File, "w") as f:
+    with open(vars.scoopApp_File, "w") as f:
       f.truncate(0)
-      f.write(requests.get(_2PT.console_WebFile).text)
+      f.write(requests.get(vars.console_WebFile).text)
       f.close()
 
       if debug:
@@ -40,38 +44,38 @@ class _2PT():
     return True
 
   def setup():
-    if os.path.exists(_2PT.scoop_Dir):
+    if os.path.exists(vars.scoop_Dir):
       if debug:
         print("Scoop is already installed. ")
       pass
     else:
-      subprocess.call(_2PT.powershell + 'iwr -useb get.scoop.sh | iex')
+      subprocess.call(f'{vars.powershell} iwr -useb get.scoop.sh | iex')
                       
-    if not os.path.exists(_2PT.main_Dir):
-      os.mkdir(_2PT.main_Dir)
+    if not os.path.exists(vars.main_Dir):
+      os.mkdir(vars.main_Dir)
     else:
       pass
-    if not os.path.exists(_2PT.scoopApp_Dir):
-      os.mkdir(_2PT.scoopApp_Dir)
+    if not os.path.exists(vars.scoopApp_Dir):
+      os.mkdir(vars.scoopApp_Dir)
     else:
       pass
 
-    if not os.path.exists(_2PT.scoopShim_File):
-      with open(_2PT.scoopShim_File, 'w') as file:
-        file.write(f'@"{_2PT.python_Path + "/Python311/python.exe"}" "{_2PT.scoopApp_File}" %*')
+    if not os.path.exists(vars.scoopShim_File):
+      with open(vars.scoopShim_File, 'w') as file:
+        file.write(f'@"{vars.python_Path + "/Python311/python.exe"}" "{vars.scoopApp_File}" %*')
       if debug:
-        print("Program file " + _2PT.scoopShim_File + " !MISSING!")
+        print(f'Program file {vars.scoopShim_File} !MISSING!')
 
-    if not os.path.exists(_2PT.scoopApp_File):
-      _2PT.utility.install(_2PT.console_WebFile, _2PT.scoopApp_Dir, "2PT", ".py")
+    if not os.path.exists(vars.scoopApp_File):
+      _2PT.utility.install(vars.console_WebFile, vars.scoopApp_Dir, "2PT", ".py")
       if debug:
-        print("Program file " + _2PT.scoopApp_File + " !MISSING!")
+        print(f"Program file {vars.scoopApp_File} !MISSING!")
 
   
   class utility():
 
     def hashFileURL(url):
-      newFile = str(_2PT.scoopApp_Dir + '/newfile.txt')
+      newFile = str(f'{vars.scoopApp_Dir}/newfile.txt')
 
       with open(newFile, "w") as f:
         f.write(requests.get(url).text)
@@ -106,12 +110,12 @@ class _2PT():
       f.close()
       return sha256.hexdigest()
 
-    def install(URL, Destination, NewName, FileExt=""):
+    def install(URL, destination, name):
       # Download and write to file
       file_content = requests.get(URL)
-      open(Destination + '/' + NewName + FileExt, "wb").write(file_content.content)
+      open(f'{destination}/{name}', 'wb').write(file_content.content)
       if debug:
-        print("Downloaded file to: " + Destination)
+        print(f'Downloaded file to: {destination}')
 
     def secure(key):
       keyList = list(key)
@@ -147,7 +151,7 @@ class _2PT():
 
     def save_key(key):
       try:
-        with open(_2PT.main_Dir+'/save_file.txt', 'w') as file:
+        with open(f'{vars.main_Dir}/save_file.txt', 'w') as file:
           file.write(key)
           return 'Key saved successfully'
       except PermissionError:
@@ -156,7 +160,7 @@ class _2PT():
     @staticmethod
     def wipe_keys():
       try:
-        with open(_2PT.main_Dir+'/save_file.txt', 'w') as file:
+        with open(f'{vars.main_Dir}/save_file.txt', 'w') as file:
           file.truncate(0)
           return 'All saved keys have been deleted'
       except PermissionError:
@@ -164,7 +168,7 @@ class _2PT():
 
     @staticmethod
     def display_dir():
-      print(_2PT.main_Dir)
+      print(vars.main_Dir)
       return True
 
   
@@ -185,7 +189,7 @@ class _2PT():
           random.shuffle(foo)
         iterable += 1
 
-        key = ''.join(random.choice(foo) for iterable in range(x32_keylength))
+        key = ''.join(random.choice(foo) for iterable in range(vars.x32_keylength))
 
       return str(key)
 
@@ -207,7 +211,7 @@ class _2PT():
           random.shuffle(foo)
         iterable += 1
 
-        key = ''.join(random.choice(foo) for iterable in range(x64_keylength))
+        key = ''.join(random.choice(foo) for iterable in range(vars.x64_keylength))
 
       return str(key)
 
@@ -235,8 +239,7 @@ class _2PT():
           random.shuffle(foo)
         iterable += 1
 
-        key = str('0' + 'x' + ''.join(
-          random.choice(foo) for iterable in range(random.choice(lengthlist))))
+      key = str(f"0x{''.join(random.choice(foo) for iterable in range(random.choice(lengthlist)))}")
 
       return str(key)
 
@@ -264,7 +267,7 @@ class _2PT():
         item = item.capitalize()
         wordlist.append(item)
 
-      key = ''.join(wordlist) + str(random.randint(175, 9999) - 75)
+      key = f'{"".join(wordlist)}{str(random.randint(175, 9999) - 75)}'
 
       return str(key)
 
@@ -278,7 +281,7 @@ class _2PT():
     n = 4
 
     for index in range(0, len(keylist), n):
-      returnkey.append(''.join(keylist[index:index + n]) + '.')
+      returnkey.append(f"{''.join(keylist[index:index + n])}.")
     formattedKey = ''.join(returnkey)
 
     return str(''.join(formattedKey[0:-1]))
@@ -332,7 +335,7 @@ USAGE
 
   # Call to setup() / prep console
   _2PT.setup()
-  _2PT.CC()
+  vars.CC()
   print(help_menu)
 
   @staticmethod
@@ -343,46 +346,46 @@ USAGE
     try:
       if inputlist[0] == 'new':
         print(_2PT.createkey(inputlist[1]))
-        time.sleep(2)
+        time.sleep(0.5)
         input_loop()
       elif inputlist[0] == 'help':
-        _2PT.CC()
+        vars.CC()
         print(help_menu)
         input_loop()
       elif inputlist[0] == 'say':
         print(' '.join(inputlist[1:len(inputlist)]))
-        time.sleep(2)
+        time.sleep(0.5)
         input_loop()
       elif inputlist[0] == 'clear':
-        _2PT.CC()
+        vars.CC()
         input_loop()
       elif inputlist[0] == 'secure':
         print(_2PT.utility.secure(inputlist[1]))
-        time.sleep(2)
+        time.sleep(0.5)
         input_loop()
       elif inputlist[0] == 'save_key':
         print(_2PT.utility.save_key(' '.join(inputlist[1:len(inputlist)])))
-        time.sleep(2)
+        time.sleep(0.5)
         input_loop()
       elif inputlist[0] == 'update':
         _2PT.update()
-        time.sleep(2)
+        time.sleep(0.5)
         input_loop()
       elif inputlist[0] == 'display_dir':
         _2PT.utility.display_dir()
-        time.sleep(2)
+        time.sleep(0.5)
         input_loop()
       elif inputlist[0] == 'wipe_keys':
         print(_2PT.utility.wipe_keys())
-        time.sleep(2)
+        time.sleep(0.5)
         input_loop()
       else:
         print('ERROR: Invalid command.')
-        time.sleep(2)
+        time.sleep(0.5)
         input_loop()
 
     except:
-      _2PT.CC()
+      vars.CC()
       print('Something went wrong, make sure your add parameters and using valid commands.')
       time.sleep(2)
       sys.exit(0)
@@ -390,11 +393,15 @@ USAGE
   # Initialize loop
   input_loop()
 
+
 try:
   driver()
 except KeyboardInterrupt:
-  _2PT.CC()
+  vars.CC()
   print('Exiting...')
-  time.sleep(1)
+  time.sleep(2)
   sys.exit(0)
+except Exception as e:
+  print(f'ERROR: An unknown runtime error occurred.')
+  sys.exit(2)
   
